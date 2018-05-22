@@ -5,15 +5,9 @@
 using namespace std;
 
 
-PLCChip_Add2UInt::PLCChip_Add2UInt()
-{
-    //ctor
-}
+PLCChip_Add2UInt::PLCChip_Add2UInt() {  }
 
-PLCChip_Add2UInt::~PLCChip_Add2UInt()
-{
-    //dtor
-}
+PLCChip_Add2UInt::~PLCChip_Add2UInt() {  }
 
 void PLCChip_Add2UInt::valueChanged(string name, struct PLCValueEvent event)
 {

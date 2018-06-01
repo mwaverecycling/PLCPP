@@ -1,31 +1,16 @@
-#ifndef PLCCHIP_ADD2UINT_HPP
-#define PLCCHIP_ADD2UINT_HPP
+#include <iostream>
 
-#include <string>
-
-#include <PLCValues.hpp>
+#include <PLCValueEvent.hpp>
 #include <PLCChip.hpp>
 
-
-
-struct s_PLC_Add2UInt_Input {
-	struct PLCValueEvent* a;
-	struct PLCValueEvent* b;
-};
-struct s_PLC_Add2UInt_Output {
-	struct PLCValueEvent c;
-};
+using namespace std;
 
 class PLCChip_Add2UInt : public PLCChip
 {
     public:
         PLCChip_Add2UInt();
-        ~PLCChip_Add2UInt();
-    	void valueChanged(string name, struct PLCValueEvent event) override;
+        ~PLCChip_Add2UInt() = default;
 
     private:
-    	struct s_PLC_Add2UInt_Input c_input;
-    	void apply() override;
+    	virtual void apply() override;
 };
-
-#endif // PLCCHIP_ADD2UINT_HPP

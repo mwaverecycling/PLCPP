@@ -1,4 +1,4 @@
-PACKAGE_NAME = i2cdevices
+PACKAGE_NAME = plcpp
 
 SRC_DIR = ./src
 INC_DIR = ./include
@@ -19,14 +19,15 @@ TEST_SOURCES = $(shell find $(TEST_DIR) -type f -name *.cpp)
 TEST_OBJECTS = $(patsubst $(TEST_DIR)/%.cpp, $(TEST_OBJ)/%.o, $(TEST_SOURCES))
 
 INC_FLAGS = -I$(INC_DIR)
-CXXFLAGS += -pedantic -Wall -Wextra -Wcast-align -Wcast-qual -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wlogical-op -Wmissing-declarations -Wmissing-include-dirs -Wnoexcept -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-null-sentinel -Wstrict-overflow=5 -Wswitch-default -Wundef -Werror -Wno-unused
+CXXFLAGS += -pedantic -Wall -Wextra -Wcast-align -Wcast-qual -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=5 -Wswitch-default -Wundef -Werror -Wno-unused
 
 $(TARGET_LIB): build
+	@mkdir -p $(TARGET_DIR)
 	$(AR) rcs $(TARGET_LIB) $(OBJECTS)
 build: $(OBJECTS) $(HEADERS)
 
 buildtest: $(TEST_OBJECTS) $(TARGET_LIB)
-	@$(CXX) $(CXXFLAGS) $(INC_FLAGS) -o $(TARGET_DIR)/test $(TEST_OBJECTS) $(TARGET_LIB)
+	$(CXX) $(CXXFLAGS) $(INC_FLAGS) -o $(TARGET_DIR)/test $(TEST_OBJECTS) $(TARGET_LIB)
 test: buildtest
 	@echo "Running Test...\n"
 	@$(TARGET_DIR)/test
@@ -41,7 +42,7 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 $(TEST_OBJ)/%.o: $(TEST_DIR)/%.cpp
 	@mkdir -p $(@D)
 	@echo Making $<
-	@$(CXX) $(CXXFLAGS) $(INC_FLAGS) $(TARGET_LIB) -c $< -o $@
+	@$(CXX) $(CXXFLAGS) $(INC_FLAGS) -c $< -o $@
 
 
 
@@ -52,4 +53,5 @@ info:
 
 clean:
 	rm -rf $(OBJ_DIR)
-	rm -f $(TARGET_LIB)
+	rm -rf $(TEST_OBJ)
+	rm -rf $(TARGET_DIR)

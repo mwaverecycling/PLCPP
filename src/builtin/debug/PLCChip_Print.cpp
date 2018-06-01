@@ -1,18 +1,14 @@
 #include <iostream>
 
 #include "builtin/debug/PLCChip_Print.hpp"
-#include "PLCValues.hpp"
 
 using namespace std;
 
 
-PLCChip_Print::PLCChip_Print() {  }
-
-PLCChip_Print::~PLCChip_Print() {  }
-
-void PLCChip_Print::valueChanged(string name, struct PLCValueEvent event)
+PLCChip_Print::PLCChip_Print() : PLCChip(0, 0) {  }
+void PLCChip_Print::valueChanged(__attribute__((unused)) int_fast8_t index, PLCValueEvent & event) { this->valueChanged(event); }
+void PLCChip_Print::valueChanged(PLCValueEvent & event)
 {
-	cout << name << " = " << event.value.v_uint;
-	//printf("%s = %llu\n", name, event.value.v_uint);
+	cout << "value: " << event.getUInt() << endl;
 }
 void PLCChip_Print::apply() {  }

@@ -1,20 +1,19 @@
 #ifndef PLCCHIP_PRINT_HPP
 #define PLCCHIP_PRINT_HPP
 
-#include <string>
-
-#include <PLCValues.hpp>
+#include <PLCValueEvent.hpp>
 #include <PLCChip.hpp>
 
 class PLCChip_Print : public PLCChip
 {
     public:
         PLCChip_Print();
-        ~PLCChip_Print();
-    	void valueChanged(string name, struct PLCValueEvent event) override;
+        ~PLCChip_Print() = default;
+        virtual void valueChanged(PLCValueEvent & event) override;
+        virtual void valueChanged(__attribute__((unused)) int_fast8_t index, PLCValueEvent & event) override;
 
     private:
-    	void apply() override;
+    	virtual void apply() override;
 };
 
 #endif // PLCCHIP_ADD2UINT_HPP

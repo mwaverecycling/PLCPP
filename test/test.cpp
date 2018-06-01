@@ -1,32 +1,20 @@
-#include <cstdio>
-#include <sys/time.h>
+#include <iostream>
 #include <math.h>
 
+#include "PLCValueEvent.hpp"
 #include "builtin/PLCChip_Add2UInt.hpp"
 #include "builtin/debug/PLCChip_Print.hpp"
 
 int main()
 {
-	PLCChip_Add2UInt* adder = new PLCChip_Add2UInt;
-	PLCChip_Print* printer = new PLCChip_Print;
+	PLCChip_Add2UInt adder;
+	PLCChip_Print printer;
+	PLCValueEvent a_event = PLCValueEvent::FromUInt(9);
+	PLCValueEvent b_event = PLCValueEvent::FromUInt(3);
 
-	struct timeval now_tv;
-	gettimeofday(&now_tv, NULL);
-
-	struct PLCTime now((unsigned long int)now_tv.tv_usec, (unsigned long long int)now_tv.tv_sec);
-	
-	//unsigned long long int a = 4;
-	//unsigned long long int b = 3;
-	union PLCValue a_val(4ULL);
-	union PLCValue b_val(3ULL);
-
-	struct PLCChangeEvent a_event(now, a_val);
-	struct PLCChangeEvent b_event(now, b_val);
-
-	adder->addListener(printer, "c");
-	adder->valueChanged("a", a_event);
-	adder->valueChanged("b", b_event);
-
-	delete adder;
-	delete printer;
+	adder.setListener(0, &printer);
+	adder.valueChanged(0, a_event);
+	adder.valueChanged(1, b_event);
+	b_event = PLCValueEvent::FromUInt(5);
+	adder.valueChanged(1, b_event);
 }

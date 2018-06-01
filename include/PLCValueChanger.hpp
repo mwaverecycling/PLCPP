@@ -2,26 +2,18 @@
 #define PLCVALUECHANGER_HPP
 
 #include <string>
-#include <map>
-#include <vector>
 
-#include <PLCValues.hpp>
+#include <PLCValueEvent.hpp>
 #include <PLCValueListener.hpp>
 
 using namespace std;
 
+
 class PLCValueChanger
 {
     public:
-        PLCValueChanger();
-        virtual ~PLCValueChanger();
-        void addListener(PLCValueListener* listener, string name);
-        void removeListener(PLCValueListener* listener);
-        void removeListener(PLCValueListener* listener, string name);
-        void changeValue(string name, struct PLCValueEvent event);
-
-    private:
-        map<string, vector<PLCValueListener *>> listeners;
+        virtual void changeValue(PLCValueEvent & event) { this->changeValue(-1, event); };
+        virtual void changeValue(int_fast8_t index, PLCValueEvent & event) = 0;
 };
 
 #endif // PLCVALUECHANGER_HPP

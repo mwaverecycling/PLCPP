@@ -3,26 +3,31 @@
 
 #include <vector>
 #include <utility>
+#include <functional>
+
 #include "PLCValueListener.hpp"
-#include "PLCValueChanger.hpp"
 
 using namespace std;
 
 
+typedef function<void(PLCValueEvent & event)> t_PLCCallback;
 typedef pair<PLCValueListener*, int_fast8_t> t_PLCListenerPair;
 
-class PLCChannel: public PLCValueListener, public PLCValueChanger
+class PLCChannel: public PLCValueListener
 {
     public:
-        virtual void addListener(PLCValueListener* listener, uint_fast8_t index);
+        virtual void addCallback(t_PLCCallback callback);
+        virtual void addListener(PLCValueListener* listener, int_fast8_t channel);
         virtual void removeListener(PLCValueListener* listener);
 
-        virtual void valueChanged(PLCValueEvent & event);
-        virtual void valueChanged(__attribute__((unused)) int_fast8_t index, PLCValueEvent & event);
-        virtual void changeValue(PLCValueEvent & event);
-        virtual void changeValue(__attribute__((unused)) int_fast8_t index, PLCValueEvent & event);
+        virtual void onChange(PLCValueEvent &event);
+        virtual void onChange(__attribute__((unused)) uint_fast8_t index, PLCValueEvent &event);
+
+    protected:
+        virtual void updateValue(PLCValueEvent &event);
 
     private:
+        vector<t_PLCCallback> callbacks;
         vector<t_PLCListenerPair> listeners;
 };
 

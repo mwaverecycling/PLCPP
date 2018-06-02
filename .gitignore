@@ -1,7 +1,10 @@
+.DS_Store
+
+.idea/
+cmake-build-debug/
 *.cbp
 *.depend
 *.layout
 
-obj/
-test/obj
 bin/
+lib/

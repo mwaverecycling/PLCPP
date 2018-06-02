@@ -17,12 +17,6 @@ void PLCChip::setListener(int_fast8_t index, PLCValueListener* listener)
     	this->listeners.at(uint_fast8_t(index)) = listener;
 	}
 }
-void PLCChip::changeValue(int_fast8_t index, PLCValueEvent & event)
-{
-	if(index >= 0) {
-    	this->listeners[uint_fast8_t(index)]->valueChanged(index, event);
-	}
-}
 bool PLCChip::isValid() const
 {
 	vector<PLCValueEvent>::const_iterator vec_itr;
@@ -31,11 +25,10 @@ bool PLCChip::isValid() const
 	}
 	return true;
 }
-void PLCChip::valueChanged(int_fast8_t index, PLCValueEvent & event)
+void PLCChip::onChange(PLCValueEvent &event) { this->onChange(0, event); }
+void PLCChip::onChange(uint_fast8_t index, PLCValueEvent &event)
 {
-	if(index >= 0) {
-		this->inputs[uint_fast8_t(index)] = event;
-	}
+	this->inputs.at(index) = event;
 	if(this->isValid()) { this->handleApply(); }
 }
 void PLCChip::handleApply()
@@ -47,7 +40,11 @@ void PLCChip::handleApply()
 	vector<PLCValueEvent>::iterator vec_itr;
 	for(uint_fast8_t i = 0; i < old_outputs.size(); i++) {
 	    if(old_outputs[i] != this->outputs[i]) {
-	    	this->changeValue(int_fast8_t(i), this->outputs[i]);
+	    	this->updateValue(i, this->outputs[i]);
 	    }
 	}
+}
+void PLCChip::updateValue(uint_fast8_t index, PLCValueEvent & event)
+{
+	this->listeners[index]->onChange(index, event);
 }

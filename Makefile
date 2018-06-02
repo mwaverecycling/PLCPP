@@ -1,5 +1,10 @@
 PACKAGE_NAME = plcpp
 
+UNAME := $(shell uname)
+ifeq ($(UNAME), Darwin)
+CXX = clang++ -std=c++11 -stdlib=libc++
+endif
+
 SRC_DIR = ./src
 INC_DIR = ./include
 OBJ_DIR = ./obj
@@ -17,20 +22,23 @@ TEST_DIR = ./test
 TEST_OBJ = ./test/obj
 TEST_SOURCES = $(shell find $(TEST_DIR) -type f -name *.cpp)
 TEST_OBJECTS = $(patsubst $(TEST_DIR)/%.cpp, $(TEST_OBJ)/%.o, $(TEST_SOURCES))
+TESTS = $(patsubst $(TEST_OBJ)/%.o, $(TARGET_DIR)/test/%, $(TEST_OBJECTS))
 
 INC_FLAGS = -I$(INC_DIR)
 CXXFLAGS += -pedantic -Wall -Wextra -Wcast-align -Wcast-qual -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wmissing-include-dirs -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=5 -Wswitch-default -Wundef -Werror -Wno-unused
+ifdef DEBUG
+CXXFLAGS += -g
+endif
 
 $(TARGET_LIB): build
 	@mkdir -p $(TARGET_DIR)
 	$(AR) rcs $(TARGET_LIB) $(OBJECTS)
 build: $(OBJECTS) $(HEADERS)
 
-buildtest: $(TEST_OBJECTS) $(TARGET_LIB)
-	$(CXX) $(CXXFLAGS) $(INC_FLAGS) -o $(TARGET_DIR)/test $(TEST_OBJECTS) $(TARGET_LIB)
-test: buildtest
+buildtests: $(TARGET_LIB) $(TESTS)
+test: buildtests
 	@echo "Running Test...\n"
-	@$(TARGET_DIR)/test
+	@$(TARGET_DIR)/test/test
 
 	
 
@@ -39,11 +47,10 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 	@echo Making $<
 	@$(CXX) $(CXXFLAGS) $(INC_FLAGS) -c $< -o $@
 
-$(TEST_OBJ)/%.o: $(TEST_DIR)/%.cpp
+$(TARGET_DIR)/test/%: $(TEST_DIR)/%.cpp
 	@mkdir -p $(@D)
 	@echo Making $<
-	@$(CXX) $(CXXFLAGS) $(INC_FLAGS) -c $< -o $@
-
+	@$(CXX) $(CXXFLAGS) $(INC_FLAGS) $< $(TARGET_LIB) -o $@
 
 
 info:

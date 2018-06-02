@@ -9,8 +9,8 @@ using namespace std;
 class PLCValueListener
 {
     public:
-        virtual void valueChanged(PLCValueEvent & event) { this->valueChanged(-1, event); };
-        virtual void valueChanged(int_fast8_t index, PLCValueEvent & event) = 0;
+        virtual void onChange(PLCValueEvent &event) = 0;
+        virtual void onChange(uint_fast8_t index, PLCValueEvent &event) = 0;
 };
 
 #endif // PLCCHANGELISTENER_HPP

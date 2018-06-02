@@ -13,8 +13,8 @@ int main()
 	PLCValueEvent b_event = PLCValueEvent::FromUInt(3);
 
 	adder.setListener(0, &printer);
-	adder.valueChanged(0, a_event);
-	adder.valueChanged(1, b_event);
+    adder.onChange(0, a_event);
+    adder.onChange(1, b_event);
 	b_event = PLCValueEvent::FromUInt(5);
-	adder.valueChanged(1, b_event);
+    adder.onChange(1, b_event);
 }

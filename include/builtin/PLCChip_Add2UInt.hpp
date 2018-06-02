@@ -1,9 +1,7 @@
-#include <iostream>
+#ifndef PLCCHIP_ADD2UINT_HPP
+#define PLCCHIP_ADD2UINT_HPP
 
-#include <PLCValueEvent.hpp>
 #include <PLCChip.hpp>
-
-using namespace std;
 
 class PLCChip_Add2UInt : public PLCChip
 {
@@ -14,3 +12,5 @@ class PLCChip_Add2UInt : public PLCChip
     private:
     	virtual void apply() override;
 };
+
+#endif // PLCCHIP_ADD2UINT_HPP

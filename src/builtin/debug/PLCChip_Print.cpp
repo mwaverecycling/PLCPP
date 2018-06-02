@@ -6,8 +6,9 @@ using namespace std;
 
 
 PLCChip_Print::PLCChip_Print() : PLCChip(0, 0) {  }
-void PLCChip_Print::valueChanged(__attribute__((unused)) int_fast8_t index, PLCValueEvent & event) { this->valueChanged(event); }
-void PLCChip_Print::valueChanged(PLCValueEvent & event)
+void PLCChip_Print::onChange(__attribute__((unused)) uint_fast8_t index, PLCValueEvent &event) {
+    this->onChange(event); }
+void PLCChip_Print::onChange(PLCValueEvent &event)
 {
 	cout << "value: " << event.getUInt() << endl;
 }
